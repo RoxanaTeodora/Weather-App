@@ -16,7 +16,7 @@
           <input
             type="text"
             placeholder="Enter your location"
-            class="input-box"
+            class="input-box" 
           />
           <button><img src="./img/magnifier.png" class="icon" id="search-btn"/></button>
         
@@ -30,10 +30,12 @@
     </div>
 <!-- raspuns afisat in card-div -->
       <div class="weather-card">
+
         <img src="/img/cloud.png" alt="Weather Image" class="weather-img" />
         <div class="weather-box">
           <p class="temperature">0 <sup>°C</sup></p>
           <p class="description">light rain</p>
+          <p id="date">Data</p>
            <div class="weather-details">
          <div class="humidity">
                     <i class="fa-solid fa-droplet"></i>
@@ -48,9 +50,11 @@
                 <span id="wind-speed"> 12km/h</span>
                 <p>Wind speed</p>
             </div>
-</div>
+          </div>
+      
       </div>
-    </div></div>
+    </div>
+  </div>
     <script src="app.js"></script>
     <script
       src="https://kit.fontawesome.com/29b673b6f3.js"

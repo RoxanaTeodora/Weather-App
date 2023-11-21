@@ -5,28 +5,28 @@ const temperature = document.querySelector(".temperature");
 const description = document.querySelector(".description");
 const humidity = document.getElementById("humidity");
 const windSpeed = document.getElementById("wind-speed");
+const data = document.getElementById("date");
 
 const location_not_found = document.querySelector(".location-not-found");
 const weatherBody = document.querySelector(".weather-card");
 
 // Built-in API request by city name
-// You can call by city name or city name in lb engleza Bucharest Malaga Nairobi Prague Almaty Munich Alaska New York
+// You can call by city name or city name in English:
+//Bucharest Almaty Prague Prague Malaga Nairobi  Munich Alaska New York
 
-//Serverul Web de Informații Meteorologice: Furnizează date meteorologice și oferă un API prin care
-//aplicatia web poate solicita și primi aceste date.
-//API-ul oferă reguli și endpoint-uri specifice pentru a accesa și manipula informațiile meteorologice.
-//Prin intermediul DOM sau altor metode, aplicația poate face solicitări către API-ul serverului meteorologic pentru a obține date actualizate.
-//API-ul acționează ca un intermediar, permițând aplicației web să comunice eficient cu serverul fără a cunoaște detaliile interne ale funcționării serverului.
-//Aplicația poate extrage informațiile meteorologice furnizate de server și să le integreze în mod dinamic în cadrul interfeței sale utilizator.
-//apiKey=șir de caractere unic și secret furnizat de un furnizor de servicii pentru a autentifica și autoriza accesul la serviciile sale
+//Serverul Web de Informații Meteorologice: Furnizează date meteorologice și oferă un API prin care aplicatia web poate solicita și primi aceste date.
 
 //functie asincrona cu wait fetch
+//fetch este folosit pt http request
 async function checkWeather(city) {
-  const apiKey = "bdf9bf7999a90897cdc09d451965ca78";
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+  const url =
+    "https://api.openweathermap.org/data/2.5/weather?appid=69518b1f8f16c35f8705550dc4161056&units=metric&q=";
 
-  //utilizare fetch pt obtinerea datelor din api endpoin si transformarea lor in json care apoi sa fie utilizate in DOM
-  const weatherData = await fetch(`${url}`).then((response) => response.json());
+  //utilizare fetch pt obtinerea datelor din api endpoin si transformarea lor in json care apoi sa fie utilizate in DOM cand promisiunea se rezolva
+  //get cu url schimbate in
+  const weatherData = await fetch(`${url}${city}`).then((response) =>
+    response.json()
+  );
 
   //display error for location clasa location_not_found trece din none la display:flex, clasa weatherBody ramane in display none
   if (weatherData.cod === `404`) {
@@ -35,26 +35,43 @@ async function checkWeather(city) {
     console.log("error");
     return;
   }
+
   //display clasa weatherBody si clasa in location_not_found ramene in display:none
   console.log("run");
   location_not_found.style.display = "none";
   weatherBody.style.display = "flex";
 
-  //tranformare temperaturii din main  din kelvin in celsius, rotunjit
-  temperature.innerHTML = `${Math.round(weatherData.main.temp - 273.15)}°C`;
+  //data transformata din unixtime in format eupean
+  const getLocaleDateFromUnixTime = (unixTimeInSeconds) => {
+    // timpul Unix în milisecunde
+    const date = new Date(unixTimeInSeconds * 1000);
+    //utilizarea metodelor pentru a extrage componente specifice datei
+    const day = date.getDate();
+    //lunile sunt indexate de la 0
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+
+    return `${day}.${month}.${year}`;
+  };
+  const date = getLocaleDateFromUnixTime(weatherData.dt);
+
+  //output in html a informatiilor primite din api
+  data.innerHTML = ` ${date}`;
+  temperature.innerHTML = `${Math.round(weatherData.main.temp)}°C`;
   description.innerHTML = `${weatherData.weather[0].description}`;
   humidity.innerHTML = `${weatherData.main.humidity}%`;
 
   //wind.speed cu o zecimale
   windSpeed.innerHTML = `${weatherData.wind.speed.toFixed(1)}km/h`;
 
-  //schimbarea tipului de icon in functie de vreme
+  //schimbarea tipului de icon in functie de descrierea vremei
+
   if (weatherData.weather[0].main === "Clear") {
     weatherImg.src = "/img/sun.png";
   } else if (weatherData.weather[0].description === "broken clouds") {
-    weatherImg.src = "/img/brokenclouds.png";
+    weatherImg.src = "/img/broken-clouds.png";
   } else if (weatherData.weather[0].description === "overcast clouds") {
-    weatherImg.src = "/img/brokenclouds.png";
+    weatherImg.src = "/img/broken-clouds.png";
   } else if (weatherData.weather[0].main === "Clouds") {
     weatherImg.src = "/img/cloud.png";
   } else if (weatherData.weather[0].main === "Rain") {
@@ -73,7 +90,6 @@ async function checkWeather(city) {
 
   console.log(weatherData);
 }
-
 //prin apasarrea butonului de search se exercuta functia
 searchBtn.addEventListener("click", () => {
   checkWeather(inputSearch.value);
