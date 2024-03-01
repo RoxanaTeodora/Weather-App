@@ -17,7 +17,7 @@ const weatherBody = document.querySelector(".weather-card");
 //Serverul Web de Informații Meteorologice: Furnizează date meteorologice și oferă un API prin care aplicatia web poate solicita și primi aceste date.
 
 //functie asincrona cu wait fetch
-//fetch este folosit pt http request
+
 async function checkWeather(city) {
   const url =
     "https://api.openweathermap.org/data/2.5/weather?appid=69518b1f8f16c35f8705550dc4161056&units=metric&q=";
@@ -66,6 +66,21 @@ async function checkWeather(city) {
 
   //schimbarea tipului de icon in functie de descrierea vremei
 
+  //switch case
+  // switch (weatherData.weather[0].main) {
+  //   case "Clear":
+  //     weatherImg.src = "/img/sun.png";
+  //     breack;
+  //   case "Clouds":
+  //     weatherImg.src = "/img/cloud.png";
+  //   case "Rain":
+  //     weatherImg.src = "/img/rain.png";
+  //   case "Snow":
+  //     weatherImg.src = "/img/snow.png";
+  //     case "Snow":
+  //       weatherImg.src = "/img/snow.png";}
+
+  //if case
   if (weatherData.weather[0].main === "Clear") {
     weatherImg.src = "/img/sun.png";
   } else if (weatherData.weather[0].description === "broken clouds") {
