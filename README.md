@@ -1,7 +1,6 @@
-# Weather-App: weather-app-roxana-teodora.netlify.app/
+# Weather-App: https://weather-app-roxana-teodora.netlify.app/
 
 weather app with API
-
 
 ### Built-in API request by city name
 
